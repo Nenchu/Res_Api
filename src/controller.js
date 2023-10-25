@@ -7,12 +7,41 @@ class libroController{
         const [result]= await pool.query('SELECT * FROM libros');
         res.json(result);
     }
+
+
     // Funcion para agregar
-    async add(req, res){
-        const libro = req.body;
-        const[result] = await pool.query(`INSERT INTO libros(nombre,autor,categoria,añoPublicacion,ISBN)VALUES(?,?,?,?,?)`, [libro.nombre,libro.autor,libro.categoria,libro.añoPublicacion,libro.ISBN]);
-        res.json({"Id insertado": result.insertId});
-    }
+    
+    async add(req, res) {
+      const libro = req.body;
+  
+      // guarda los atributos validos
+      const atributosRequeridos = ['nombre', 'autor', 'categoria', 'añoPublicacion', 'ISBN'];
+      //compara los atributos con los de atributosRequeridos
+      const atributosExtra = Object.keys(libro).filter(attr => !atributosRequeridos.includes(attr));
+  
+      try{ 
+      if ((atributosExtra.length > 0) || (atributosExtra.length != atributosRequeridos.length)){
+        return res.json({ error: `Atributos invalido: ${atributosExtra.join(' , ')} `});
+      }
+     
+        const [result] = await pool.query(
+          `INSERT INTO libros(nombre, autor, categoria, añoPublicacion, ISBN) VALUES(?, ?, ?, ?, ?)`,
+          [libro.nombre, libro.autor, libro.categoria, libro.añoPublicacion, libro.ISBN]
+        );
+        res.json({ "Id insertado": result.insertId });
+      }catch (error) {
+      console.log('Error al añadir el libro:', error);
+      }
+    }
+
+
+
+
+
+
+
+
+
     //Funcion para borrar buscando el id del libro
     async deleteId(req, res){
         const libro = req.body; 
@@ -52,7 +81,26 @@ class libroController{
         res.json({"Registros eliminados": result.affectedRows});
     }
 
+
+
+
+
+
       
 }
 
 export const libro = new libroController();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
