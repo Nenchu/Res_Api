@@ -13,8 +13,8 @@ class libroController{
         const[result] = await pool.query(`INSERT INTO libros(nombre,autor,categoria,añoPublicacion,ISBN)VALUES(?,?,?,?,?)`, [libro.nombre,libro.autor,libro.categoria,libro.añoPublicacion,libro.ISBN]);
         res.json({"Id insertado": result.insertId});
     }
-    //Funcion para borrar
-    async delete(req, res){
+    //Funcion para borrar buscando el id del libro
+    async deleteId(req, res){
         const libro = req.body; 
         const [result] = await pool.query(`DELETE FROM libros WHERE id=(?)`, [libro.id]); 
         res.json({"Registros eliminados": result.affectedRows});
@@ -43,9 +43,16 @@ class libroController{
     
         }
       } 
+
+
+      //Funcion para eliminar un libro por ISBN
+      async deleteISBN(req, res){
+        const libro = req.body; 
+        const [result] = await pool.query(`DELETE FROM libros WHERE ISBN=(?)`, [libro.ISBN]); 
+        res.json({"Registros eliminados": result.affectedRows});
+    }
+
       
-
-
 }
 
 export const libro = new libroController();
