@@ -15,8 +15,9 @@ router.delete('/libroId', libro.deleteId);
 //Solicitud para modificar
 router.put('/libro', libro.update);
 
-//Solicitud a una Id 
-router.get('/libro', libro.getOne);
+//Solicitud a una Id
+router.get('/libro/:id', libro.getOne);
+
 
 //Solicitud para eliminar un libro por isbn
 router.delete('/libroISBN', libro.deleteISBN);
