@@ -48,11 +48,17 @@ class libroController{
     
 
     //Funcion para borrar buscando el id del libro
-    async deleteId(req, res){
-        const libro = req.body; 
-        const [result] = await pool.query(`DELETE FROM libros WHERE id=(?)`, [libro.id]); 
-        res.json({"Registros eliminados": result.affectedRows});
+    async deleteId(req, res) {
+      try {
+        const libro = req.body;
+        const [result] = await pool.query(`DELETE FROM libros WHERE id = ?`, [libro.id]);
+        res.json({ "Registros eliminados": result.affectedRows });
+      } catch (error) {
+        console.log('Error al eliminar el libro:', error);
+        res.status(500).json({ error: "Error en el servidor" });
+      }
     }
+    
 
 
     //Funcion para modificar
